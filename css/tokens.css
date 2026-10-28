@@ -1,0 +1,66 @@
+/* Tasarım token'ları.
+   Portfolyo tasarım sistemiyle ortak olanlar: boşluk ölçeği, köşe yarıçapı, gölge, odak halkası, tip ölçeği.
+   Kart kısıtı gereği üzerine yazılanlar: renkler (sıcak tonlar) ve gövde yazısı (serif, Literata).
+   Tüm metin/zemin çiftleri WCAG AA (≥ 4.5:1) için ölçülmüştür — bkz. docs/kontrast.md */
+
+:root {
+  /* Yazı */
+  --font-body: 'Literata', Georgia, 'Times New Roman', serif;
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fs-base: 1.0625rem;          /* 17px gövde */
+  --fs-sm: 0.9375rem;
+  --fs-xs: 0.8125rem;
+  --fs-h1: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem);
+  --fs-h2: 1.2rem;
+  --fs-kpi: clamp(1.8rem, 1.4rem + 1.2vw, 2.4rem);
+  --lh: 1.6;
+
+  /* Boşluk ve biçim (portfolyo ölçeği) */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 2px rgb(60 30 10 / .06), 0 4px 16px rgb(60 30 10 / .06);
+  --focus: 3px solid var(--focus-color);
+
+  /* Renk — yetişkin modu: kâğıt, mürekkep, kiremit */
+  --paper: #FBF5EA;
+  --surface: #FFFDF8;
+  --surface-2: #F5EBDA;
+  --ink: #2A1F17;
+  --muted: #64503F;
+  --line: #E3D4BE;
+  --accent: #9C3D21;        /* kiremit — paper üzerinde 6.6:1 */
+  --accent-ink: #FFFDF8;
+  --accent-soft: #F6E0D3;
+  --ochre: #7E5300;         /* hardal — paper üzerinde 6.3:1 */
+  --ochre-soft: #F3E3C2;
+  --olive: #4E5D23;         /* yükseliş */
+  --rust: #A0331B;          /* düşüş */
+  --focus-color: #1D4E89;   /* sıcak paletle karışmasın diye soğuk mavi odak halkası */
+  --chart-1: #9C3D21;
+  --chart-2: #C98B3A;
+  --grid: #E8DCCB;
+}
+
+/* Çocuk modu: daha büyük yazı, daha yuvarlak hatlar, daha aydınlık sıcak zemin */
+[data-mode="cocuk"] {
+  --fs-base: 1.1875rem;          /* 19px */
+  --fs-sm: 1.0625rem;
+  --fs-xs: 0.9375rem;
+  --lh: 1.7;
+  --radius: 20px;
+  --radius-sm: 14px;
+  --paper: #FFF3DC;
+  --surface: #FFFBF1;
+  --surface-2: #FFE6B8;
+  --ink: #2B1D10;
+  --muted: #5E4630;
+  --line: #F0D29D;
+  --accent: #A8381A;
+  --accent-soft: #FFD9C2;
+  --ochre: #7A4D00;
+  --ochre-soft: #FFE2A6;
+  --chart-1: #C2491F;
+  --chart-2: #E3A230;
+  --grid: #F3DDB6;
+}
