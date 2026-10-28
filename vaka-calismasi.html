@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vaka çalışması · Okuma Pusulası</title>
+  <meta name="description" content="Koleksiyon karar desteği için kitap eğilim panosu: problem, kullanıcı, veri hattı, tasarım kararları, kullanıcı testi ve sonuç.">
+  <meta name="theme-color" content="#9C3D21">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/literata-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: var(--fs-base)/1.7 var(--font-body); }
+    a { color: var(--accent); text-underline-offset: 2px; }
+    :focus-visible { outline: var(--focus); outline-offset: 2px; border-radius: 4px; }
+    .skip { position: absolute; left: 16px; top: -60px; background: var(--ink); color: var(--surface); padding: 8px 16px; border-radius: 6px; }
+    .skip:focus { top: 8px; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 0 16px; }
+    header.hero { background: var(--surface); border-bottom: 1px solid var(--line); padding: 48px 0 32px; }
+    .eyebrow { font: 600 var(--fs-xs)/1.3 var(--font-ui); text-transform: uppercase; letter-spacing: .06em; color: var(--accent); margin: 0 0 8px; }
+    h1 { font-size: var(--fs-h1); line-height: 1.2; margin: 0 0 12px; }
+    h2 { font-size: 1.45rem; line-height: 1.3; margin: 48px 0 12px; }
+    h3 { font-size: 1.1rem; margin: 24px 0 8px; }
+    .lede { font-size: 1.15rem; color: var(--muted); margin: 0; }
+    .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 24px 0 0; padding: 0; list-style: none; font-family: var(--font-ui); font-size: var(--fs-sm); }
+    .facts li { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; }
+    .facts b { display: block; font-size: var(--fs-xs); color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .btn { font: 600 var(--fs-sm)/1 var(--font-ui); background: var(--accent); color: var(--accent-ink); border: 1px solid var(--accent); padding: 13px 18px; border-radius: var(--radius-sm); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+    .btn--ghost { background: transparent; color: var(--accent); }
+    main { padding-bottom: 64px; }
+    figure { margin: 24px 0; }
+    figure img, figure video, figure iframe { width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); display: block; }
+    figcaption { font: var(--fs-xs)/1.5 var(--font-ui); color: var(--muted); margin-top: 8px; }
+    .grid2 { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 700px) { .grid2 { grid-template-columns: 1fr 1fr; } .grid2--wide { grid-template-columns: 2fr 1fr; align-items: start; } }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; }
+    .card h3 { margin-top: 0; }
+    table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); background: var(--surface); }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    thead th { background: var(--surface-2); font-family: var(--font-ui); font-size: var(--fs-xs); }
+    .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); }
+    .todo { background: var(--ochre-soft); border-left: 4px solid var(--ochre); padding: 12px 16px; border-radius: 6px; font-size: var(--fs-sm); }
+    .diagram { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
+    .diagram svg { width: 100%; height: auto; display: block; }
+    .diagram text { font-family: var(--font-ui); fill: var(--ink); }
+    .diagram .sub { fill: var(--muted); font-size: 11px; }
+    .diagram .box { fill: var(--paper); stroke: var(--line); stroke-width: 1.5; }
+    .diagram .box--key { fill: var(--accent-soft); stroke: var(--accent); }
+    .diagram .arrow { stroke: var(--muted); stroke-width: 1.8; fill: none; marker-end: url(#ah); }
+    .diagram .ahead { fill: var(--muted); }
+    blockquote { margin: 16px 0; padding: 12px 16px; border-left: 4px solid var(--accent); background: var(--surface); font-style: italic; }
+    ul.tight li { margin-bottom: 6px; }
+    footer { border-top: 1px solid var(--line); background: var(--surface); padding: 24px 0; font: var(--fs-xs)/1.6 var(--font-ui); color: var(--muted); }
+    @media (min-width: 900px) { .wrap { padding: 0 24px; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#icerik">İçeriğe geç</a>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Vaka çalışması · Veri ürünü · BVA 2245</p>
+      <h1>Koleksiyon karar desteği için kitap eğilim panosu</h1>
+      <p class="lede">Bir ilçe halk kütüphanesinin kütüphanecisi “hangi kitabı alalım?” sorusunu tahminle değil, okurların gerçekte neye yöneldiğine bakarak yanıtlayabilsin diye; her gün kendiliğinden güncellenen bir pano tasarlayıp yayına aldım.</p>
+      <ul class="facts">
+        <li><b>Rol</b>Veri hattı, arayüz tasarımı, geliştirme, test</li>
+        <li><b>Süre</b>1 haftalık sprint</li>
+        <li><b>Araçlar</b>GitHub Actions, Node.js, Chart.js, HTML/CSS/JS</li>
+        <li><b>Veri</b>Open Library trend ve konu uçları</li>
+      </ul>
+      <div class="cta">
+        <a class="btn" href="index.html">Canlı panoyu aç</a>
+        <a class="btn btn--ghost" id="gh" href="https://github.com/" rel="noopener">GitHub deposu</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="icerik" class="wrap">
+    <h2>Demo (75 sn)</h2>
+    <figure>
+      <!-- DEMO_VIDEO: YouTube "liste dışı" bağlantısını aşağıdaki iframe src'sine yazın (…/embed/VIDEO_ID) ya da docs/demo.mp4 dosyasını ekleyin. -->
+      <video controls preload="none" poster="docs/ekran-masaustu.png" src="docs/demo.mp4">
+        <track kind="captions" src="docs/demo-altyazi.vtt" srclang="tr" label="Türkçe" default>
+        Tarayıcınız video öğesini desteklemiyor. <a href="docs/demo.mp4">Videoyu indirin</a>.
+      </video>
+      <figcaption>Ekran kaydı, Türkçe altyazılı: filtreleme, sıralama, çocuk modu ve API kapalıyken son veriyle açılma.</figcaption>
+    </figure>
+
+    <h2>Problem</h2>
+    <p>İlçe kütüphanelerinde koleksiyon bütçesi küçüktür ve alım kararları çoğunlukla yayınevi kataloglarına, satış listelerine ya da kütüphanecinin sezgisine dayanır. Bu kaynaklar ya pazarlama odaklıdır ya da geçmişe bakar. Kütüphanecinin elinde, okurların şu anda hangi kitaplara yöneldiğini konu ve yayın dönemi bazında gösteren, her gün kendiliğinden yenilenen bir görünüm yoktur.</p>
+    <p>Asıl soru şuydu: <strong>“Bu hafta öne çıkan kitaplardan hangisi geçici bir ilgi, hangisi kalıcı bir eğilim?”</strong> Tek günlük bir liste bunu yanıtlayamaz; zamana yayılmış veri gerekir.</p>
+
+    <h2>Kullanıcı</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>Kütüphaneci (yetişkin koleksiyonu)</h3>
+        <ul class="tight">
+          <li>Ayda bir alım listesi hazırlar, sınırlı bütçeyle.</li>
+          <li>Veri aracı kullanmaya alışkın değil; tabloya ve sade cümlelere güvenir.</li>
+          <li>Sorusu: “Hangi konu yükselişte, listede kalıcı olan kitap hangisi?”</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Kütüphaneci (çocuk bölümü)</h3>
+        <ul class="tight">
+          <li>Çocuk ve gençlik koleksiyonundan sorumludur; okul dönemine göre alım yapar.</li>
+          <li>Ekranı bazen çocuklarla birlikte inceler: büyük yazı ve sade görünüm önemlidir.</li>
+          <li>Sorusu: “Çocuklara yönelik hangi yeni kitaplar ilgi görüyor?”</li>
+        </ul>
+      </div>
+    </div>
+    <p><em>Not: Müşteri kurgusaldır; ürün gerçek bir kurumla iş birliği içinde geliştirilmemiştir.</em></p>
+
+    <h2>Veri hattı mimarisi</h2>
+    <p>Open Library geçmiş trend verisi sunmaz; yalnızca “şu anki” listeyi verir. Bu yüzden kendi zaman serimi biriktirmem gerekti. GitHub Actions 6 saatte bir çalışıp listeyi çekiyor, zaman damgalı bir snapshot olarak depoya yazıyor ve tüm snapshot'lardan arayüzün okuduğu tek bir özet dosya üretiyor.</p>
+    <div class="diagram" role="img" aria-label="Veri hattı şeması: GitHub Actions zamanlayıcısı 6 saatte bir Open Library trend, konu ve eser uçlarından veri çeker; veriyi snapshot olarak depoya yazar; build betiği latest.json üretir; GitHub Pages yayınlar; tarayıcı veriyi okur ve son başarılı kopyayı önbellekte saklar.">
+      <svg viewBox="0 0 820 300" aria-hidden="true">
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahead" d="M0 0L10 5L0 10z"/></marker></defs>
+        <rect class="box" x="10" y="30" width="170" height="92" rx="10"/>
+        <text x="95" y="62" text-anchor="middle" font-weight="700" font-size="14">Open Library API</text>
+        <text class="sub" x="95" y="82" text-anchor="middle">/trending/daily · weekly</text>
+        <text class="sub" x="95" y="98" text-anchor="middle">/subjects/{konu}</text>
+        <text class="sub" x="95" y="114" text-anchor="middle">/works/{id} (tek sefer)</text>
+
+        <rect class="box box--key" x="230" y="20" width="200" height="112" rx="10"/>
+        <text x="330" y="50" text-anchor="middle" font-weight="700" font-size="14">GitHub Actions</text>
+        <text class="sub" x="330" y="70" text-anchor="middle">cron: 6 saatte bir</text>
+        <text class="sub" x="330" y="86" text-anchor="middle">fetch.mjs → snapshot</text>
+        <text class="sub" x="330" y="102" text-anchor="middle">build.mjs → latest.json</text>
+        <text class="sub" x="330" y="118" text-anchor="middle">1,1 sn aralık · 3 deneme</text>
+
+        <rect class="box" x="480" y="30" width="150" height="92" rx="10"/>
+        <text x="555" y="62" text-anchor="middle" font-weight="700" font-size="14">Depo /data</text>
+        <text class="sub" x="555" y="82" text-anchor="middle">snapshots/*.json</text>
+        <text class="sub" x="555" y="98" text-anchor="middle">works.json (önbellek)</text>
+        <text class="sub" x="555" y="114" text-anchor="middle">latest.json · status.json</text>
+
+        <rect class="box" x="670" y="30" width="140" height="92" rx="10"/>
+        <text x="740" y="70" text-anchor="middle" font-weight="700" font-size="14">GitHub Pages</text>
+        <text class="sub" x="740" y="90" text-anchor="middle">statik yayın</text>
+
+        <rect class="box box--key" x="480" y="190" width="330" height="96" rx="10"/>
+        <text x="645" y="220" text-anchor="middle" font-weight="700" font-size="14">Tarayıcı (pano)</text>
+        <text class="sub" x="645" y="240" text-anchor="middle">Chart.js grafikleri · sparkline tablo</text>
+        <text class="sub" x="645" y="256" text-anchor="middle">localStorage + service worker: son başarılı veri</text>
+        <text class="sub" x="645" y="272" text-anchor="middle">8 sn zaman aşımı → uyarı bandı</text>
+
+        <rect class="box" x="10" y="190" width="420" height="96" rx="10"/>
+        <text x="220" y="220" text-anchor="middle" font-weight="700" font-size="14">Hata yolu</text>
+        <text class="sub" x="220" y="240" text-anchor="middle">API yanıt vermezse latest.json değişmez,</text>
+        <text class="sub" x="220" y="256" text-anchor="middle">status.json ok:false yazılır, iş kırmızı görünür;</text>
+        <text class="sub" x="220" y="272" text-anchor="middle">pano son başarılı veriyle açılıp kullanıcıyı uyarır.</text>
+
+        <path class="arrow" d="M180 76H226"/>
+        <path class="arrow" d="M430 76H476"/>
+        <path class="arrow" d="M630 76H666"/>
+        <path class="arrow" d="M740 122V186"/>
+        <path class="arrow" d="M330 132V186"/>
+      </svg>
+    </div>
+    <h3>Önemli kararlar</h3>
+    <ul class="tight">
+      <li><strong>Tarayıcıdan doğrudan API yerine zamanlanmış çekim:</strong> Her kullanıcı Open Library'ye istek atmaz; günde 4 çekim, eser ayrıntıları önbellekte. Kaynağın hız sınırına saygı ve hızlı açılış.</li>
+      <li><strong>“Listede kalınan gün”</strong> = kitabın günlük trend listesinde görüldüğü farklı takvim günü sayısı (İstanbul saatine göre). Geçici ilgi ile kalıcı eğilimi ayıran ana ölçüt bu.</li>
+      <li><strong>Konu eşlemesi:</strong> Open Library'nin binlerce serbest konu etiketini 12 kütüphaneci dostu gruba indirdim; önce konu ucunun üye listesine, sonra anahtar kelimelere bakıyorum.</li>
+      <li><strong>API anahtarı yok:</strong> Kaynak anahtar istemiyor; istemci kodunda gizli bilgi bulunmuyor.</li>
+    </ul>
+
+    <h2>Ekranlar</h2>
+    <div class="grid2 grid2--wide">
+      <figure>
+        <img src="docs/ekran-masaustu.png" alt="1440 piksel genişlikte pano: üstte filtreler, dört KPI kartı, konulara göre trend grafiği, yayın dönemi grafiği ve sparkline'lı kitap tablosu." loading="lazy" width="1440" height="900">
+        <figcaption>Masaüstü (1440 px): KPI → grafik → tablo akışı.</figcaption>
+      </figure>
+      <figure>
+        <img src="docs/ekran-mobil.png" alt="360 piksel genişlikte pano: filtreler alt alta, tablo satırları kartlara dönüşmüş." loading="lazy" width="360" height="780">
+        <figcaption>Mobil (360 px): tablo satırları karta dönüşür.</figcaption>
+      </figure>
+    </div>
+    <div class="grid2">
+      <figure>
+        <img src="docs/ekran-cocuk.png" alt="Çocuk modu: daha büyük yazı, daha yuvarlak köşeler ve yalnızca çocuk ve gençlik kitapları." loading="lazy" width="1440" height="900">
+        <figcaption>Çocuk modu: 19 px gövde yazısı, yuvarlak hatlar, yalnızca çocuk/gençlik kitapları.</figcaption>
+      </figure>
+      <figure>
+        <img src="docs/ekran-hata.png" alt="Bağlantı yokken üstte kırmızı uyarı bandı: son başarılı verinin tarihi ve Tekrar dene düğmesi." loading="lazy" width="1440" height="500">
+        <figcaption>Hata durumu: API'ye ulaşılamazken son başarılı veriyle açılış.</figcaption>
+      </figure>
+    </div>
+
+    <h2>Tasarım kararları</h2>
+    <h3>Portfolyo tasarım sistemi ile kart kısıtı</h3>
+    <p>Portfolyomun boşluk ölçeğini, köşe yarıçapını, odak halkasını ve tip ölçeğini aynen kullandım. Renk ve gövde yazısında ise <strong>kart kısıtı önceliklidir</strong>: kütüphane kimliği için kâğıt, mürekkep ve kiremit tonlarından oluşan sıcak bir palet ve okunaklı bir serif (Literata) seçtim. Literata ekran okuması için tasarlanmış bir serif; Türkçe karakterleri eksiksiz destekliyor ve yerelde barındırılıyor. Odak halkasını bilerek soğuk mavi bıraktım: sıcak paletin içinde kaybolmasın.</p>
+    <h3>İki görünüm modu</h3>
+    <p>Çocuk modu yalnızca bir renk değişimi değil: gövde yazısı 17 px'ten 19 px'e çıkıyor, satır aralığı ve dokunma alanları büyüyor, köşeler yuvarlaklaşıyor ve veri yalnızca çocuk/gençlik etiketli kitaplara süzülüyor. Her iki moddaki tüm metin/zemin çiftleri 4.5:1'in üzerinde (en düşük 5.31:1).</p>
+    <h3>Erişilebilirlik</h3>
+    <ul class="tight">
+      <li>Her grafiğin üstünde veriden üretilen tek cümlelik özet ve altında “Veriyi tablo olarak gör”.</li>
+      <li>Renk tek başına anlam taşımıyor: haftalık seri taralı desenle, durumlar ▲ ▼ ★ ikonları ve metinle gösteriliyor.</li>
+      <li>Sparkline'ların her biri ekran okuyucuya “Günlük sıra 12 → 5 (en iyi 3)…” biçiminde okunuyor.</li>
+      <li>Sıralanabilir başlıklar gerçek düğmeler ve <code>aria-sort</code> taşıyor; dar ekranda ayrıca bir sıralama seçicisi var.</li>
+    </ul>
+
+    <h2>Kullanıcı testi</h2>
+    <div id="test-bulgulari" class="todo">
+      <!-- KULLANICI_TESTI: docs/kullanici-testi.md tamamlandığında bu blok gerçek bulgularla değiştirilecek. -->
+      Kullanıcı testi bulguları, test tamamlandığında buraya eklenecek (2 katılımcı, 3 görev; süre, başarı ve takılma noktaları).
+    </div>
+
+    <h2>Sonuç</h2>
+    <ul class="tight">
+      <li>Pano insan müdahalesi olmadan günde 4 kez güncelleniyor; her çalışmada bir snapshot birikiyor.</li>
+      <li>Kütüphaneci tek ekranda konu, dönem ve kalıcılık bilgisini birlikte görüyor; “3+ gündür listede” filtresi geçici ilgiyi eliyor.</li>
+      <li>API kapalıyken ve çevrimdışıyken pano son başarılı veriyle açılıyor, durumu açıkça söylüyor; uygulama olarak yüklenebiliyor (PWA).</li>
+      <li id="lighthouse-sonuc">Lighthouse (mobil): ölçüm sonrası eklenecek.</li>
+    </ul>
+
+    <h2>Bir haftam daha olsaydı</h2>
+    <ul class="tight">
+      <li><strong>Yerel katalog eşleşmesi:</strong> Kütüphanenin kendi kataloğu (ör. MARC dışa aktarımı) ile karşılaştırıp “trendde ama rafımızda yok” listesini çıkarırdım; asıl karar bu.</li>
+      <li><strong>Türkçe yayın sinyali:</strong> Open Library ağırlıklı olarak İngilizce okurları yansıtıyor; ISBN üzerinden Türkçe baskısı olan kitapları işaretlerdim.</li>
+      <li><strong>Uzun dönem eğilimi:</strong> Birkaç haftalık snapshot biriktiğinde konu paylarının zaman serisini ana grafiğe eklerdim.</li>
+      <li><strong>Alım listesi dışa aktarımı:</strong> Seçilen kitapları CSV olarak indirip satın alma birimine göndermek.</li>
+    </ul>
+
+    <h2>İlgili çalışma</h2>
+    <p id="ilgili"><!-- ONCEKI_PROJE: önceki veri hikâyesi bağlantısı --></p>
+  </main>
+  <footer>
+    <div class="wrap">Kurgusal müşteri için hazırlanmış öğrenci projesidir; Open Library veya herhangi bir kütüphane ile resmî bağı yoktur. Veri: Open Library (açık veri). Yazı tipi: Literata (SIL OFL 1.1).</div>
+  </footer>
+</body>
+</html>
