@@ -1,0 +1,25 @@
+WEBVTT
+
+00:00.000 --> 00:08.000
+Okuma Pusulası: bir ilçe kütüphanesinin kütüphanecisi için kitap eğilim panosu.
+
+00:08.000 --> 00:18.000
+Veri Open Library'den GitHub Actions ile 6 saatte bir otomatik çekiliyor; her seferinde bir snapshot birikiyor.
+
+00:18.000 --> 00:28.000
+Üstte dört gösterge, altında hangi konuların günlük ve haftalık listede öne çıktığı.
+
+00:28.000 --> 00:42.000
+Konu ve yayın yılına göre süzüyorum; yalnızca listede kalıcı olan kitapları bırakıyorum.
+
+00:42.000 --> 00:52.000
+Tablo sıralanabilir; mini grafik sıra geçmişini, bu sütun listede kalınan gün sayısını gösteriyor.
+
+00:52.000 --> 01:00.000
+Çocuk modu yazıyı büyütüyor ve yalnızca çocuk kitaplarını gösteriyor.
+
+01:00.000 --> 01:12.000
+Bağlantı kesilse de pano son başarılı veriyle açılıyor ve bunu açıkça söylüyor.
+
+01:12.000 --> 01:18.000
+Süreç ve test bulguları vaka çalışmasında.
