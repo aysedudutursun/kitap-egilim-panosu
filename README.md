@@ -2,8 +2,8 @@
 
 **Koleksiyon karar desteği için kitap eğilim panosu.** Bir ilçe halk kütüphanesinin (kurgusal müşteri) kütüphanecisi için, Open Library trend verisinden 6 saatte bir kendiliğinden güncellenen, konu ve yayın yılına göre süzülebilen erişilebilir bir karar panosu.
 
-- **Canlı ürün:** https://KULLANICI.github.io/kitap-egilim-panosu/
-- **Vaka çalışması:** https://KULLANICI.github.io/kitap-egilim-panosu/vaka-calismasi.html
+- **Canlı ürün:** https://aysedudutursun.github.io/kitap-egilim-panosu/
+- **Vaka çalışması:** https://aysedudutursun.github.io/kitap-egilim-panosu/vaka-calismasi.html
 - **Demo videosu:** _(yayınlandığında eklenecek)_
 
 > Öğrenci projesidir (MCBÜ · BVA 2245 Kullanıcı Arayüzü Tasarımı). Müşteri kurgusaldır; Open Library veya herhangi bir kütüphane ile resmî bağı yoktur.
@@ -74,7 +74,7 @@ flowchart LR
 Gereken: Node.js 20+ (bağımlılık yok) ve herhangi bir statik sunucu.
 
 ```bash
-git clone https://github.com/KULLANICI/kitap-egilim-panosu.git
+git clone https://github.com/aysedudutursun/kitap-egilim-panosu.git
 cd kitap-egilim-panosu
 node scripts/fetch.mjs     # Open Library'den bir snapshot al
 node scripts/build.mjs     # data/latest.json üret
