@@ -19,7 +19,9 @@
 |---|---|---|
 | G1 | “Son 10 yılda yayımlanmış, günlük listede en üst sıradaki **polisiye** kitabı bulun.” | Konu = Polisiye ve Son 10 yıl filtresi; doğru kitabı söyler |
 | G2 | “Listede **en uzun süredir** kalan kitap hangisi, kaç gündür listede?” | KPI kartından ya da *Listede (gün)* sütununu sıralayarak doğru yanıt |
-| G3 | “Ekranı **çocuk bölümü** için değiştirin ve bugün yükselişte olan bir çocuk kitabını söyleyin.” | Çocuk moduna geçer; ▲ Yükseliyor durumundaki bir kitabı söyler |
+| G3 | “Ekranı **çocuk bölümü** için değiştirin ve **haftalık** listede en üst sıradaki çocuk kitabını söyleyin.” | Çocuk moduna geçer, listeyi Haftalık yapar; doğru kitabı söyler |
+
+> Not: “Yükselişte” göstergesi en az 2 günlük veri gerektirdiği için G3, ilk gün yapılan testte haftalık sıraya göre soruldu.
 
 ## Kapanış soruları
 
