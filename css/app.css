@@ -40,6 +40,8 @@ a:hover { text-decoration-thickness: 2px; }
 .meta { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s5); padding-block: var(--s3); font-size: var(--fs-xs); color: var(--muted); font-family: var(--font-ui); }
 .meta time { color: var(--ink); font-weight: 600; }
 .meta__dot { margin: 0 4px; }
+/* Veri gelince dolan satır yer değiştirmesin (CLS): dar ekranda 3 satırlık yer ayrılır */
+@media (max-width: 600px) { .meta { min-height: calc(3 * 1.6em + 2 * var(--s3)); align-content: flex-start; } }
 
 .notice { display: flex; gap: var(--s3); align-items: flex-start; padding: var(--s3) var(--s4); border-radius: var(--radius); border: 1px solid var(--ochre); background: var(--ochre-soft); color: var(--ink); font-size: var(--fs-sm); margin-bottom: var(--s3); }
 .notice--error { border-color: var(--rust); background: var(--accent-soft); }
