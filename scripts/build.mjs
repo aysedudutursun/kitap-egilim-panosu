@@ -74,6 +74,7 @@ async function main() {
       editions: w.editions ?? null,
       category: w.category || OTHER.id,
       child: !!w.child,
+      tr: w.tr ?? null,
       daily,
       weekly: lastMap.weekly.get(id) ?? null,
       prev,

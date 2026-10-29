@@ -10,7 +10,8 @@ const BOOKS = Array.from({ length: 160 }, (_, i) => ({
   author_name: [`Test Yazar ${(i % 37) + 1}`],
   first_publish_year: i % 13 === 0 ? undefined : 1850 + ((i * 37) % 176),
   edition_count: (i * 7) % 90 + 1,
-  subjects: [SUBJ[i % SUBJ.length], i % 9 === 0 ? 'Juvenile literature' : 'Adult'],
+  subjects: i % 9 === 0 ? [SUBJ[i % SUBJ.length], 'Juvenile literature', "Children's fiction"] : [SUBJ[i % SUBJ.length], 'Adult'],
+  language: i % 4 === 0 ? ['eng', 'tur'] : ['eng'],
 }));
 let run = 0;
 function rng(seed) { return () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }; }
@@ -30,6 +31,12 @@ http.createServer((req, res) => {
     const name = m[1].replace(/_/g, ' ');
     const works = BOOKS.filter((b) => b.subjects[0] === name || (name === 'mystery and detective stories' && b.subjects[0] === 'mystery')).slice(0, 50);
     return send(200, { name, work_count: 10000 + run * 3 + name.length, works: works.map((b) => ({ key: b.key, title: b.title })) });
+  }
+  if (u.pathname === '/search.json') {
+    // Gerçek API gibi: q=key:(/works/A OR /works/B ...) → docs[{key, subject}]
+    const keys = (u.searchParams.get('q') || '').match(/\/works\/OL\d+W/g) || [];
+    const docs = BOOKS.filter((b) => keys.includes(b.key)).map((b) => ({ key: b.key, subject: b.subjects, first_publish_year: b.first_publish_year }));
+    return send(200, { numFound: docs.length, docs });
   }
   if ((m = u.pathname.match(/^\/works\/(OL\d+W)\.json$/))) {
     const b = BOOKS.find((x) => x.key.endsWith(m[1]));

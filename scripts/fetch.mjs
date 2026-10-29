@@ -46,6 +46,7 @@ async function readJSON(url, fallback) {
   try { return JSON.parse(await readFile(url, 'utf8')); } catch { return fallback; }
 }
 
+const nfc = (x) => (x == null ? x : String(x).normalize('NFC').trim());
 const workId = (key) => String(key || '').replace('/works/', '');
 
 async function main() {
@@ -64,12 +65,12 @@ async function main() {
       const prev = works[id] || {};
       works[id] = {
         ...prev,
-        title: w.title || prev.title || '(başlıksız)',
-        authors: (w.author_name || prev.authors || []).slice(0, 3),
+        title: nfc(w.title) || prev.title || '(başlıksız)',
+        authors: [...new Set((w.author_name || prev.authors || []).map(nfc))].slice(0, 3),
         year: w.first_publish_year ?? prev.year ?? null,
         editions: w.edition_count ?? prev.editions ?? null,
-        cover: w.cover_i ?? prev.cover ?? null,
-        subjects: prev.subjects || (Array.isArray(w.subject) ? w.subject.slice(0, 25) : undefined),
+        // Türkçe baskısı var mı: ilçe kütüphanesi için doğrudan satın alma sinyali
+        tr: Array.isArray(w.language) ? w.language.includes('tur') : (prev.tr ?? null),
       };
       return { id, rank: i + 1 };
     });
@@ -91,27 +92,34 @@ async function main() {
     }
   }
 
-  // 3) Konu etiketi bilinmeyen yeni eserler için eser ayrıntısı (yalnızca bir kez)
-  const needDetail = Object.keys(works).filter((id) => !works[id].subjects);
-  for (const id of needDetail.slice(0, 160)) {
+  // 3) Konu etiketi bilinmeyen yeni eserler (yalnızca bir kez).
+  // Trend yanıtında "subject" alanı yok. Eser başına /works/{id}.json yerine search.json ile
+  // 50'şerlik toplu sorgu: 100 yeni eser için 100 değil 2 istek (hız sınırına saygı).
+  const needDetail = Object.keys(works).filter((id) => !works[id].tagged);
+  const tags = {};
+  for (let i = 0; i < needDetail.length; i += 50) {
+    const batch = needDetail.slice(i, i + 50);
+    const q = `key:(${batch.map((id) => `/works/${id}`).join(' OR ')})`;
     try {
-      const json = await getJSON(`/works/${id}.json`);
-      works[id].subjects = (json.subjects || []).slice(0, 25);
-      if (!works[id].year && json.first_publish_date) {
-        const y = parseInt(String(json.first_publish_date).match(/\d{4}/)?.[0], 10);
-        if (y) works[id].year = y;
+      const json = await getJSON(`/search.json?q=${encodeURIComponent(q)}&fields=key,subject,first_publish_year&limit=50`);
+      for (const d of json.docs || []) {
+        const id = workId(d.key);
+        if (!works[id]) continue;
+        tags[id] = d.subject || []; // ham etiketler depoya yazılmaz (eser başına 100+ etiket); yalnızca sonuç saklanır
+        works[id].year ??= d.first_publish_year ?? null;
       }
-    } catch {
-      works[id].subjects = works[id].subjects || null; // sonraki çalışmada tekrar denenecek
+      for (const id of batch) { tags[id] ??= []; works[id].tagged = true; }
+    } catch (err) {
+      console.warn('Konu etiketleri alınamadı, sonraki çalıştırmada tekrar denenecek:', err.message);
     }
   }
 
   // 4) Sınıflandırma
+  // Yeni etiketlenen eserler sınıflandırılır; eskiler için yalnızca konu ucu listesi (güçlü sinyal) değişiklik yapabilir.
   for (const [id, w] of Object.entries(works)) {
-    const { category, child } = classify(w.subjects || [], membership[id] || []);
-    w.category = category;
-    w.child = child;
-    delete w.cover; // kapak görseli kullanılmıyor (telif); alan saklanmaz
+    if (tags[id]) Object.assign(w, classify(tags[id], membership[id] || []), { tag_count: tags[id].length });
+    else if ((membership[id] || []).some((c) => c !== 'kurgu')) Object.assign(w, classify([], membership[id]));
+    delete w.cover; delete w.subjects; // kapak görseli (telif) ve ham etiketler saklanmaz
   }
 
   const snapshot = {
