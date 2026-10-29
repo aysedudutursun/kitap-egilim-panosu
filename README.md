@@ -10,9 +10,9 @@
 
 ## CV cümlesi
 
-> Open Library trend verisini GitHub Actions ile 6 saatte bir çekip zaman serisi biriktiren, kütüphanecilerin hangi kitabın kalıcı eğilim olduğunu konu ve yayın yılına göre görebildiği erişilebilir bir karar panosu geliştirdim (Chart.js, PWA, Lighthouse mobil erişilebilirlik __).
+> Open Library trend verisini GitHub Actions ile 6 saatte bir çekip zaman serisi biriktiren, kütüphanecilerin hangi kitabın kalıcı eğilim olduğunu konu ve yayın yılına göre görebildiği erişilebilir bir karar panosu geliştirdim (Chart.js, PWA, Lighthouse mobil erişilebilirlik 100, performans 99).
 
-_(Lighthouse puanı ölçüldükten sonra boşluk doldurulacak.)_
+**Lighthouse (mobil, PageSpeed Insights, 29 Ekim 2026):** Performans 99 · Erişilebilirlik 100 · En İyi Uygulamalar 100 · SEO 100 — [ekran görüntüsü](docs/lighthouse-mobil.png)
 
 ## Özellikler
 
