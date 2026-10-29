@@ -1,6 +1,6 @@
 // Service worker: uygulama kabuğunu önbelleğe alır, veriyi "önce ağ, olmazsa önbellek" ile sunar.
 // Önbellekten dönen veri yanıtı x-sw-cache: 1 başlığı taşır; arayüz bunu görünce "son başarılı veri" uyarısı gösterir.
-const VERSION = 'op-v1';
+const VERSION = 'op-v2';
 const SHELL = [
   './', 'index.html', 'vaka-calismasi.html', 'css/fonts.css', 'css/tokens.css', 'fonts/literata-latin-400-normal.woff2', 'fonts/literata-latin-600-normal.woff2', 'fonts/literata-latin-700-normal.woff2', 'fonts/literata-latin-ext-400-normal.woff2', 'fonts/literata-latin-ext-600-normal.woff2', 'fonts/literata-latin-ext-700-normal.woff2', 'css/app.css', 'js/i18n.js', 'js/app.js',
   'vendor/chart.umd.min.js', 'manifest.webmanifest', 'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png',

@@ -205,3 +205,7 @@ main { padding-bottom: var(--s7); outline: none; }
   .books td:nth-child(2)::before { display: none; }
   .book__title { font-size: 1.05rem; }
 }
+
+/* Türkçe baskı: renk tek başına anlam taşımasın diye ✓ + metin */
+.trflag { font-family: var(--font-ui); font-size: .875rem; color: var(--muted); white-space: nowrap; }
+.trflag--yes { color: var(--ink); font-weight: 600; }

@@ -95,6 +95,10 @@
           <input id="f-stay" name="stay" type="checkbox">
           <label for="f-stay" data-i18n="fStay">Yalnızca 3+ gündür listede olanlar</label>
         </div>
+        <div class="field field--check">
+          <input id="f-tr" name="tr" type="checkbox">
+          <label for="f-tr" data-i18n="fTr">Yalnızca Türkçe baskısı olanlar</label>
+        </div>
         <div class="field field--actions">
           <button type="reset" class="btn btn--ghost" data-i18n="reset">Filtreleri temizle</button>
         </div>
@@ -146,6 +150,7 @@
               <th scope="col" data-key="days" aria-sort="none"><button type="button"><span data-i18n="colDays">Listede (gün)</span><span class="sort" aria-hidden="true"></span></button></th>
               <th scope="col" data-key="weekly" aria-sort="none"><button type="button"><span data-i18n="colWeekly">Haftalık sıra</span><span class="sort" aria-hidden="true"></span></button></th>
               <th scope="col" data-key="editions" aria-sort="none"><button type="button"><span data-i18n="colEd">Baskı</span><span class="sort" aria-hidden="true"></span></button></th>
+              <th scope="col" data-key="tr" aria-sort="none"><button type="button"><span data-i18n="colTr">TR baskı</span><span class="sort" aria-hidden="true"></span></button></th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>

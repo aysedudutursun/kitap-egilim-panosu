@@ -37,7 +37,7 @@
     stale: null,               // null | 'net' | 'src' | 'old'
     lang: params.get('lang') || prefs.lang || 'tr',
     mode: params.get('mod') || prefs.mode || 'yetiskin',
-    f: { list: 'daily', cat: '', ymin: null, ymax: null, q: '', stay: false },
+    f: { list: 'daily', cat: '', ymin: null, ymax: null, q: '', stay: false, tr: false },
     sort: { key: 'daily', dir: 'asc' },
     shown: PAGE,
     charts: {},
@@ -127,10 +127,11 @@
   function base() {
     let b = state.data.books;
     if (state.mode === 'cocuk') b = b.filter((x) => x.child);
-    const { ymin, ymax, q, stay } = state.f;
+    const { ymin, ymax, q, stay, tr } = state.f;
     if (ymin != null) b = b.filter((x) => x.year != null && x.year >= ymin);
     if (ymax != null) b = b.filter((x) => x.year != null && x.year <= ymax);
     if (stay) b = b.filter((x) => x.days >= 3);
+    if (tr) b = b.filter((x) => x.tr === true);
     if (q) {
       const n = q.toLocaleLowerCase('tr');
       b = b.filter((x) => (x.title + ' ' + x.authors.join(' ')).toLocaleLowerCase('tr').includes(n));
@@ -148,6 +149,7 @@
     switch (key) {
       case 'title': return b.title;
       case 'category': return catLabel(b.category);
+      case 'tr': return b.tr === true ? 0 : b.tr === false ? 1 : 2; // önce Türkçe baskısı olanlar
       case 'trend': return b.daily != null && b.prev != null ? -(b.prev - b.daily) : 1000 + STATUS_ORDER.indexOf(b.status);
       default: return b[key];
     }
@@ -417,6 +419,7 @@
         <td data-label="${esc(t.colDays)}"><span class="days"><span class="days__bar" style="width:${Math.round((b.days / maxDays) * 48)}px" aria-hidden="true"></span>${esc(t.days(b.days))}</span></td>
         <td class="num" data-label="${esc(t.colWeekly)}">${b.weekly ?? '—'}</td>
         <td class="num" data-label="${esc(t.colEd)}">${fmtNum(b.editions)}</td>
+        <td data-label="${esc(t.colTr)}">${b.tr === true ? `<span class="trflag trflag--yes"><span aria-hidden="true">✓</span> ${esc(t.trYes)}</span>` : b.tr === false ? `<span class="trflag">${esc(t.trNo)}</span>` : '—'}</td>
       </tr>`;
     }).join('');
 
@@ -445,7 +448,7 @@
     const f = state.f;
     $('#f-list').value = f.list; $('#f-cat').value = f.cat;
     $('#f-ymin').value = f.ymin ?? ''; $('#f-ymax').value = f.ymax ?? '';
-    $('#f-q').value = f.q; $('#f-stay').checked = f.stay;
+    $('#f-q').value = f.q; $('#f-stay').checked = f.stay; $('#f-tr').checked = !!f.tr;
     $$('.quick .chip').forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.range === rangeKey())));
   }
   const rangeKey = () => `${state.f.ymin ?? ''}-${state.f.ymax ?? ''}`.replace(/^-$/, '');
@@ -455,7 +458,7 @@
     state.f = {
       list: $('#f-list').value, cat: $('#f-cat').value,
       ymin: num($('#f-ymin').value), ymax: num($('#f-ymax').value),
-      q: $('#f-q').value.trim(), stay: $('#f-stay').checked,
+      q: $('#f-q').value.trim(), stay: $('#f-stay').checked, tr: $('#f-tr').checked,
     };
   }
 
@@ -539,7 +542,7 @@
   }
 
   function resetFilters() {
-    state.f = { list: 'daily', cat: '', ymin: null, ymax: null, q: '', stay: false };
+    state.f = { list: 'daily', cat: '', ymin: null, ymax: null, q: '', stay: false, tr: false };
     syncForm(); update();
   }
 
