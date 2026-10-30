@@ -1,0 +1,31 @@
+name: Güvenlik taraması (OWASP ZAP baseline)
+
+# Elle başlatılır: "önce" ve "sonra" taramaları aynı ayarlarla, sadece etiket değiştirilerek çalıştırılır.
+on:
+  workflow_dispatch:
+    inputs:
+      hedef:
+        description: "Taranacak adres"
+        required: true
+        default: "https://aysedudutursun.github.io/kitap-egilim-panosu/"
+      etiket:
+        description: "Rapor etiketi (ör. once, sonra)"
+        required: true
+        default: "once"
+
+permissions:
+  contents: read
+
+jobs:
+  zap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ZAP baseline taraması
+        # v0.15.0 sürümüne commit hash ile sabitlenmiştir (tedarik zinciri saldırısına karşı)
+        uses: zaproxy/action-baseline@de8ad967d3548d44ef623df22cf95c3b0baf8b25
+        with:
+          target: ${{ inputs.hedef }}
+          allow_issue_writing: false
+          fail_action: false
+          artifact_name: zap-${{ inputs.etiket }}
