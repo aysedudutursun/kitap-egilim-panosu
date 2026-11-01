@@ -23,7 +23,7 @@ jobs:
       matrix:
         dil: ["javascript-typescript", "actions"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # github/codeql-action v4.39.1, commit hash ile sabitlenmiştir
       - uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370
         with:
