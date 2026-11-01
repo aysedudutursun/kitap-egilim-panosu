@@ -105,7 +105,11 @@
           <button type="reset" class="btn btn--ghost" data-i18n="reset">Filtreleri temizle</button>
         </div>
       </form>
-      <p id="result-count" class="filters__count" aria-live="polite"></p>
+      <div class="filters__result">
+        <p id="result-count" class="filters__count" aria-live="polite"></p>
+        <!-- Kullanıcı testi bulgusu: 3 katılımcının 3'ü de filtreden sonra sonucu geç buldu → doğrudan tabloya götüren düğme -->
+        <a id="result-jump" class="btn btn--jump" href="#t-title" hidden><span id="result-jump-text"></span> <span aria-hidden="true">↓</span></a>
+      </div>
     </section>
 
     <!-- KPI kartları -->
@@ -136,7 +140,7 @@
     <!-- Detay tablosu (zorunlu ileri özellik) -->
     <section class="panel" aria-labelledby="t-title">
       <div class="table-head">
-        <h2 id="t-title" class="panel__title" data-i18n="tTitle">Kitaplar</h2>
+        <h2 id="t-title" class="panel__title" data-i18n="tTitle" tabindex="-1">Kitaplar</h2>
         <p class="hint" data-i18n="tHint">Sütun başlıklarına basarak sıralayın. Mini grafik, kitabın son ölçümlerdeki günlük sırasını gösterir (yukarı = daha üst sıra).</p>
       </div>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Kitap tablosu" data-i18n-aria="tableRegion">

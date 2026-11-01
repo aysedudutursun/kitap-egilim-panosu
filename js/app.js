@@ -115,6 +115,7 @@
     $$('.chart__canvas').forEach((el) => el.classList.remove('is-ready'));
     $('#tbody').innerHTML = Array.from({ length: 6 }, () => `<tr class="skel-row" aria-hidden="true">${'<td><div class="skel skel-line"></div></td>'.repeat(8)}</tr>`).join('');
     $('#result-count').textContent = '';
+    $('#result-jump').hidden = true;
     $('#c1-summary').textContent = ''; $('#c2-summary').textContent = '';
     document.body.setAttribute('aria-busy', 'true');
   }
@@ -439,6 +440,8 @@
     more.textContent = t.more(Math.min(rest, PAGE));
 
     $('#result-count').textContent = t.count(all.length, state.data.books.length);
+    $('#result-jump-text').textContent = t.jump(all.length);
+    $('#result-jump').hidden = false;
     $$('.books th').forEach((th) => th.setAttribute('aria-sort', th.dataset.key === state.sort.key ? (state.sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'));
     const thName = $(`.books th[data-key="${state.sort.key}"] [data-i18n]`)?.textContent || '';
     $('#t-caption').textContent = t.caption(all.length) + thName;
@@ -524,6 +527,14 @@
       renderTable(filtered());
       syncSortSelect();
     }));
+    // Filtre panelinden tabloya atla: başlığa kaydır ve odağı oraya taşı (klavye/ekran okuyucu için)
+    $('#result-jump').addEventListener('click', (e) => {
+      e.preventDefault();
+      const h = $('#t-title');
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      h.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      h.focus({ preventScroll: true });
+    });
     $('#more').addEventListener('click', () => {
       const firstNew = state.shown;
       state.shown += PAGE; renderTable(filtered());
