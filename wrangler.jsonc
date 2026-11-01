@@ -1,0 +1,14 @@
+// Cloudflare Workers (statik varlıklar) yayın ayarı.
+// Yalnızca scripts/pages-build.sh ile hazırlanan _site klasörü yayınlanır;
+// script'ler, iş akışları, ham snapshot'lar ve tarama raporları siteye çıkmaz.
+// _site yoksa yayın başarısız olur (deponun tamamı yanlışlıkla yayınlanmaz).
+{
+  "name": "kitap-egilim-panosu",
+  "compatibility_date": "2026-10-31",
+  "build": {
+    "command": "bash scripts/pages-build.sh"
+  },
+  "assets": {
+    "directory": "./_site"
+  }
+}

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Cloudflare Pages derleme adımı: yalnızca yayınlanacak dosyaları _site klasörüne kopyalar.
-# Pages ayarı → Build command: bash scripts/pages-build.sh   ·   Output directory: _site
+# Cloudflare derleme adımı (wrangler.jsonc → build.command): yalnızca yayınlanacak dosyaları _site klasörüne kopyalar.
+# Yayınlanan klasör: _site (wrangler.jsonc → assets.directory)
 set -euo pipefail
 rm -rf _site
 mkdir -p _site
