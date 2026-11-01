@@ -30,7 +30,7 @@ jobs:
           mkdir -p _site
           cp -r index.html vaka-calismasi.html manifest.webmanifest sw.js css js fonts vendor icons data docs _site/
           rm -rf _site/data/snapshots   # ham snapshot'lar depoda kalır, siteye gerekmez
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
       - id: deployment
