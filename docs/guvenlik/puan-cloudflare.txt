@@ -1,0 +1,19 @@
+host: kitap-egilim-panosu.tayse1482.workers.dev
+zaman_utc: 2026-11-01T18:29:05Z
+calistirma: https://github.com/aysedudutursun/kitap-egilim-panosu/actions/runs/41336839290
+
+== Mozilla HTTP Observatory (API v2) ==
+{
+  "grade": "A+",
+  "score": 155,
+  "tests_passed": 12,
+  "tests_failed": 0,
+  "tests_quantity": 12,
+  "scanned_at": "2026-11-01T18:29:05.939Z",
+  "details_url": "https://developer.mozilla.org/en-US/observatory/analyze?host=kitap-egilim-panosu.tayse1482.workers.dev",
+  "error": null
+}
+
+== securityheaders.com ==
+x-grade başlığı alınamadı
+rapor: https://securityheaders.com/?q=https%3A%2F%2Fkitap-egilim-panosu.tayse1482.workers.dev%2F&hide=on&followRedirects=on
