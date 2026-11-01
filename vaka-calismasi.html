@@ -139,7 +139,7 @@
         <figcaption>Çocuk modu: 19 px gövde yazısı, yuvarlak hatlar, yalnızca çocuk/gençlik kitapları.</figcaption>
       </figure>
       <figure>
-        <img src="docs/ekran-hata.png" alt="Bağlantı yokken üstte kırmızı uyarı bandı: son başarılı verinin tarihi ve Tekrar dene düğmesi." loading="lazy" width="1440" height="500">
+        <img src="docs/ekran-hata.png" alt="Bağlantı yokken üstte kırmızı uyarı bandı: son başarılı verinin tarihi ve Tekrar dene düğmesi." loading="lazy" width="1440" height="900">
         <figcaption>Hata durumu: API'ye ulaşılamazken son başarılı veriyle açılış.</figcaption>
       </figure>
     </div>
@@ -158,9 +158,34 @@
     </ul>
 
     <h2>Kullanıcı testi</h2>
-    <div id="test-bulgulari" class="todo">
-      <!-- KULLANICI_TESTI: docs/kullanici-testi.md tamamlandığında bu blok gerçek bulgularla değiştirilecek. -->
-      Kullanıcı testi bulguları, test tamamlandığında buraya eklenecek (2 katılımcı, 3 görev; süre, başarı ve takılma noktaları).
+    <div id="test-bulgulari">
+      <p>Canlı pano üzerinde <strong>3 katılımcıyla</strong> (kardeşim ve iki arkadaşım) yardım etmeden, kronometreyle 3 görevli test yaptım. Ayrıntılı protokol ve form: <a href="https://github.com/aysedudutursun/kitap-egilim-panosu/blob/main/docs/kullanici-testi.md">docs/kullanici-testi.md</a>.</p>
+      <ul class="tight">
+        <li><strong>G1</strong> — Son 10 yılda yayımlanmış, günlük listede en üstteki polisiye kitabı bul.</li>
+        <li><strong>G2</strong> — Listede en uzun süredir kalan kitabı ve gün sayısını bul.</li>
+        <li><strong>G3</strong> — Çocuk moduna geç, haftalık listede en üstteki çocuk kitabını bul.</li>
+      </ul>
+      <table>
+        <caption class="sr-only">Kullanıcı testi sonuçları: görev başına süre (saniye)</caption>
+        <thead><tr><th scope="col">Katılımcı</th><th scope="col">G1</th><th scope="col">G2</th><th scope="col">G3</th><th scope="col">Not</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">K1 (kardeşim)</th><td>✓ 10 sn</td><td>✓ 12 sn</td><td>✓ 10 sn</td><td>G1'de sonucun nerede göründüğünü geç buldu</td></tr>
+          <tr><th scope="row">K2 (arkadaşım)</th><td>✓ 15 sn</td><td>✓ 12 sn</td><td>✓ 10 sn</td><td>G1'de sonucun nerede göründüğünü geç buldu</td></tr>
+          <tr><th scope="row">K3 (arkadaşım)</th><td>✓ 17 sn</td><td>✓ 15 sn</td><td>✓ 10 sn</td><td>G1'de sonucun nerede göründüğünü geç buldu</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Bulgu:</strong> Tüm görevler tamamlandı (9/9), ama <strong>3 katılımcının 3'ü de</strong> filtreyi uyguladıktan sonra sonucun sayfanın neresinde göründüğünü geç buldu. Sebep: filtre panelinin altında önce KPI kartları ve grafikler geliyor; tablo mobilde birkaç ekran aşağıda kalıyor ve paneldeki sonuç sayısı küçük, gri bir metin.</p>
+      <p><strong>Değişiklik:</strong> Filtre panelinin sonuna, eşleşen kitap sayısını gösteren belirgin bir <em>“Sonuçlara git (N kitap) ↓”</em> düğmesi eklendi. Düğme tabloya kaydırıyor ve klavye odağını tablo başlığına taşıyor (ekran okuyucu ve klavye kullanıcıları için de geçerli).</p>
+      <div class="grid2">
+        <figure>
+          <img src="docs/test-once.png" alt="Önce: Polisiye ve Son 10 yıl filtresi seçili mobil ekranda filtre panelinin altında yalnızca küçük gri '219 kitaptan 1 tanesi gösteriliyor' yazısı var; sonuçlara giden bir yol görünmüyor." loading="lazy" width="360" height="780">
+          <figcaption>Önce: sonuç sayısı küçük gri metin, tabloya giden yol yok.</figcaption>
+        </figure>
+        <figure>
+          <img src="docs/test-sonra.png" alt="Sonra: aynı ekranda sonuç sayısının altında tam genişlikte kiremit renkli 'Sonuçlara git (1 kitap) ↓' düğmesi." loading="lazy" width="360" height="780">
+          <figcaption>Sonra: “Sonuçlara git (1 kitap) ↓” düğmesi; basınca doğrudan tabloya iner.</figcaption>
+        </figure>
+      </div>
     </div>
 
     <h2>Sonuç</h2>

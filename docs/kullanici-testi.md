@@ -28,21 +28,24 @@
 - “Bu ekranda en çok neye güvendiniz, neye güvenmediniz?”
 - “Bir şeyi değiştirebilseydiniz ne olurdu?”
 
-## Sonuç formu
+## Sonuç formu (test yapıldı — 3 katılımcı)
 
-| Katılımcı | Profil | Cihaz | Görev | Başarılı mı? | Süre (sn) | Nerede takıldı / ne dedi |
-|---|---|---|---|---|---|---|
-| K1 | | | G1 | | | |
-| K1 | | | G2 | | | |
-| K1 | | | G3 | | | |
-| K2 | | | G1 | | | |
-| K2 | | | G2 | | | |
-| K2 | | | G3 | | | |
+| Katılımcı | Profil | Görev | Başarılı mı? | Süre (sn) | Nerede takıldı / ne dedi |
+|---|---|---|---|---|---|
+| K1 | Kardeşim | G1 | Evet | 10 | Sonuca bakacağı yeri geç buldu |
+| K1 | Kardeşim | G2 | Evet | 12 | — |
+| K1 | Kardeşim | G3 | Evet | 10 | — |
+| K2 | Arkadaşım | G1 | Evet | 15 | Sonuca bakacağı yeri geç buldu |
+| K2 | Arkadaşım | G2 | Evet | 12 | — |
+| K2 | Arkadaşım | G3 | Evet | 10 | — |
+| K3 | Arkadaşım | G1 | Evet | 17 | Sonuca bakacağı yeri geç buldu |
+| K3 | Arkadaşım | G2 | Evet | 15 | — |
+| K3 | Arkadaşım | G3 | Evet | 10 | — |
+
+**Özet:** 9/9 görev tamamlandı. Ortalama süre G1 14 sn, G2 13 sn, G3 10 sn.
 
 ## Bulgular → değişiklik
 
 | Bulgu | Kaç kişide | Yapılan değişiklik | Önce | Sonra |
 |---|---|---|---|---|
-| | | | `docs/test-once.png` | `docs/test-sonra.png` |
-
-> Önce/sonra görselleri: değişiklikten **önce** ilgili ekranın görüntüsünü alın, değişikliği yapın, aynı açıdan **sonra** görüntüsünü alın.
+| Filtreden sonra sonucun sayfanın neresinde göründüğü geç fark ediliyor (KPI ve grafikler tablonun önünde; sonuç sayısı küçük gri metin) | 3 / 3 | Filtre panelinin sonuna “Sonuçlara git (N kitap) ↓” düğmesi; tabloya kaydırır ve odağı tablo başlığına taşır | [`docs/test-once.png`](test-once.png) | [`docs/test-sonra.png`](test-sonra.png), [`docs/test-sonra-tiklama.png`](test-sonra-tiklama.png) |
