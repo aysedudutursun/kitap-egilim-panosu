@@ -4,7 +4,7 @@
 
 - **Canlı ürün:** https://aysedudutursun.github.io/kitap-egilim-panosu/
 - **Vaka çalışması:** https://aysedudutursun.github.io/kitap-egilim-panosu/vaka-calismasi.html
-- **Demo videosu:** _(yayınlandığında eklenecek)_
+- **Demo videosu (83 sn, Türkçe altyazılı):** https://aysedudutursun.github.io/kitap-egilim-panosu/docs/demo.mp4 — vaka çalışması sayfasına gömülü
 
 > Öğrenci projesidir (MCBÜ · BVA 2245 Kullanıcı Arayüzü Tasarımı). Müşteri kurgusaldır; Open Library veya herhangi bir kütüphane ile resmî bağı yoktur.
 

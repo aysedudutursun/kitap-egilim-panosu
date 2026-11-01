@@ -33,14 +33,13 @@
   </header>
 
   <main id="icerik" class="wrap">
-    <h2>Demo (75 sn)</h2>
+    <h2>Demo (83 sn)</h2>
     <figure>
-      <!-- DEMO_VIDEO: YouTube "liste dışı" bağlantısını aşağıdaki iframe src'sine yazın (…/embed/VIDEO_ID) ya da docs/demo.mp4 dosyasını ekleyin. -->
-      <video controls preload="none" poster="docs/ekran-masaustu.png" src="docs/demo.mp4">
-        <track kind="captions" src="docs/demo-altyazi.vtt" srclang="tr" label="Türkçe" default>
+      <!-- Demo videosu: 83 sn ekran kaydı; Türkçe altyazı videoya gömülüdür (metni: docs/demo-altyazi.vtt). -->
+      <video controls preload="none" poster="docs/ekran-masaustu.png" src="docs/demo.mp4" aria-describedby="video-aciklama">
         Tarayıcınız video öğesini desteklemiyor. <a href="docs/demo.mp4">Videoyu indirin</a>.
       </video>
-      <figcaption>Ekran kaydı, Türkçe altyazılı: filtreleme, sıralama, çocuk modu ve API kapalıyken son veriyle açılma.</figcaption>
+      <figcaption id="video-aciklama">Sessiz ekran kaydı, anlatım videoya gömülü Türkçe altyazıyla (<a href="docs/demo-altyazi.vtt">altyazı metni</a>): konu ve yayın yılı filtresi, grafikler, mini grafikli sıralanabilir tablo, Türkçe baskı filtresi, çocuk modu ve TR/EN dil seçimi. Hata durumu için test bağlantısı: <a href="index.html?test=hata">?test=hata</a>.</figcaption>
     </figure>
 
     <h2>Problem</h2>

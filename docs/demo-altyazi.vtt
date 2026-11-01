@@ -1,25 +1,40 @@
 WEBVTT
 
-00:00.000 --> 00:08.000
-Okuma Pusulası: bir ilçe kütüphanesinin kütüphanecisi için kitap eğilim panosu.
+00:00.000 --> 00:03.000
+Okuma Pusulası: ilçe kütüphanesinin kütüphanecisi için kitap eğilim panosu (kurgusal müşteri).
 
-00:08.000 --> 00:18.000
-Veri Open Library'den GitHub Actions ile 6 saatte bir otomatik çekiliyor; her seferinde bir snapshot birikiyor.
+00:03.000 --> 00:09.000
+Konu olarak "Polisiye ve gerilim" seçiyorum.
 
-00:18.000 --> 00:28.000
-Üstte dört gösterge, altında hangi konuların günlük ve haftalık listede öne çıktığı.
+00:09.000 --> 00:16.000
+Veri Open Library'den GitHub Actions ile 6 saatte bir otomatik çekiliyor.
 
-00:28.000 --> 00:42.000
-Konu ve yayın yılına göre süzüyorum; yalnızca listede kalıcı olan kitapları bırakıyorum.
+00:16.000 --> 00:24.000
+Yayın yılını 1970–2020 arasıyla sınırlıyorum; göstergeler anında güncelleniyor.
 
-00:42.000 --> 00:52.000
-Tablo sıralanabilir; mini grafik sıra geçmişini, bu sütun listede kalınan gün sayısını gösteriyor.
+00:24.000 --> 00:33.000
+Grafikler: konulara göre günlük/haftalık liste ve yayın dönemine göre dağılım.
 
-00:52.000 --> 01:00.000
-Çocuk modu yazıyı büyütüyor ve yalnızca çocuk kitaplarını gösteriyor.
+00:33.000 --> 00:39.000
+Sıralanabilir tablo: mini grafik sıra geçmişini, "Listede (gün)" kalınan gün sayısını gösteriyor.
 
-01:00.000 --> 01:12.000
-Bağlantı kesilse de pano son başarılı veriyle açılıyor ve bunu açıkça söylüyor.
+00:39.000 --> 00:44.000
+"Nasıl okunur?" kutusu durum işaretlerini renkle birlikte simge ve metinle açıklıyor.
 
-01:12.000 --> 01:18.000
-Süreç ve test bulguları vaka çalışmasında.
+00:44.000 --> 00:51.000
+"Yalnızca Türkçe baskısı olanlar": kütüphane için Türkçesi bulunan kitaplar.
+
+00:51.000 --> 00:57.500
+Filtreleri temizleyip yalnızca yayın yılına göre yeniden süzüyorum.
+
+00:57.500 --> 01:06.000
+Çocuk modu: yazı büyüyor ve yalnızca çocuk ve gençlik kitapları kalıyor.
+
+01:06.000 --> 01:12.500
+Çocuk modunda da grafikler ve mini grafikli tablo aynı şekilde çalışıyor.
+
+01:12.500 --> 01:19.000
+Arayüz Türkçe ve İngilizce kullanılabiliyor.
+
+01:19.000 --> 01:22.900
+Ayrıntılar, test bulguları ve mimari vaka çalışması sayfasında.
