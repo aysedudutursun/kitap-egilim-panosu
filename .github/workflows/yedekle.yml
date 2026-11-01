@@ -1,0 +1,45 @@
+name: Yedekle (3-2-1 — ikinci kopya)
+
+# Her başarılı veri çekiminden sonra data/ klasörünün arşivini GitHub Releases'a yükler.
+# Releases depo dosya ağacından ayrıdır: data/ silinse ya da şifrelense bile yedekler etkilenmez.
+# Saklama (yaşam döngüsü): en yeni 30 yedek tutulur, daha eskiler silinir.
+on:
+  workflow_run:
+    workflows: ["Veri çek (Open Library)"]
+    types: [completed]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yedekle
+  cancel-in-progress: false
+
+jobs:
+  yedek:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Arşiv + SHA-256 + manifest
+        run: bash scripts/dr/yedek-al.sh "$RUNNER_TEMP/yedek"
+      - name: Releases'a yükle
+        run: |
+          TAG="yedek-$(date -u +%Y%m%dT%H%MZ)"
+          gh release create "$TAG" "$RUNNER_TEMP"/yedek/* \
+            --repo "$GITHUB_REPOSITORY" --target "$(git rev-parse HEAD)" \
+            --title "Veri yedeği $TAG" \
+            --notes "Otomatik yedek. Geri yükleme: scripts/dr/geri-yukle.sh $TAG"
+          echo "Yüklendi: $TAG"
+      - name: Saklama politikası (en yeni 30 yedek)
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+            --jq '[.[] | select(.tag_name | startswith("yedek-"))] | .[30:] | .[].tag_name' |
+          while read -r ESKI; do
+            [ -n "$ESKI" ] && gh release delete "$ESKI" --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes && echo "Silindi: $ESKI"
+          done

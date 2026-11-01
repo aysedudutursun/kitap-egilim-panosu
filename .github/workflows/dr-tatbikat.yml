@@ -1,0 +1,141 @@
+name: DR tatbikatı (sil → geri yükle → RTO/RPO ölç)
+
+# Kişisel tehdit senaryosu: snapshot verisinin tamamen silinmesi (yanlışlıkla ya da fidye yazılımıyla).
+# Adımlar: canlı veri silinir → canlı sitede kesinti gözlenir → en yeni yedek otomatik geri yüklenir →
+# site yeniden veri sunana kadar beklenir → RTO/RPO hesaplanır ve kanıt dosyası commit'lenir.
+# Güvenlik ağı: silinen veri git geçmişinde de durur (gerekirse git revert).
+on:
+  workflow_dispatch:
+    inputs:
+      onay:
+        description: "Canlı veri silinecek. Onaylamak için SIL yazın."
+        required: true
+      site:
+        description: "Canlı site"
+        required: true
+        default: "https://kitap-egilim-panosu.tayse1482.workers.dev"
+
+permissions:
+  contents: write
+
+# Veri çekimiyle aynı grup: tatbikat sürerken yeni snapshot yazılmaz.
+concurrency:
+  group: veri-cek
+  cancel-in-progress: false
+
+env:
+  RTO_HEDEF_DK: 15
+  RPO_HEDEF_SA: 6
+
+jobs:
+  tatbikat:
+    if: inputs.onay == 'SIL'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SITE: ${{ inputs.site }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: 0) Ön kontrol
+        run: |
+          case "$SITE" in https://*) ;; *) echo "Site https ile başlamalı"; exit 1;; esac
+          SITE="${SITE%/}"; echo "SITE=$SITE" >> "$GITHUB_ENV"
+          git config user.name "dr-botu"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ls data/snapshots | sort > "$RUNNER_TEMP/once.txt"
+          echo "Silinmeden önce: $(wc -l < "$RUNNER_TEMP/once.txt") snapshot"
+          curl -fsS "$SITE/data/latest.json?t=$(date +%s)" | jq -e '.data_at' > /dev/null
+          echo "Canlı site veri sunuyor."
+          gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '[.[] | select(.tag_name | startswith("yedek-"))][0].tag_name' | grep -q yedek- \
+            || { echo "Hiç yedek yok; önce Yedekle iş akışını çalıştırın"; exit 1; }
+
+      - name: 1) FELAKET — canlı veriyi sil
+        run: |
+          git rm -rq data/snapshots data/latest.json data/works.json data/status.json
+          git commit -qm "felaket(tatbikat): snapshot verisi silindi"
+          git pull -q --rebase origin main && git push -q origin HEAD:main
+          echo "T_SIL=$(date -u +%s)" >> "$GITHUB_ENV"
+          echo "Veri silindi: $(date -u +%H:%M:%S) UTC"
+
+      - name: 2) Kesintiyi canlı sitede gözle
+        run: |
+          for i in $(seq 1 60); do
+            KOD=$(curl -s -o /dev/null -w '%{http_code}' "$SITE/data/latest.json?t=$(date +%s)")
+            if [ "$KOD" != "200" ]; then
+              echo "T_KESINTI=$(date -u +%s)" >> "$GITHUB_ENV"; echo "Kesinti gözlendi (HTTP $KOD)"; exit 0
+            fi
+            sleep 10
+          done
+          echo "T_KESINTI=" >> "$GITHUB_ENV"; echo "10 dk içinde kesinti gözlenemedi (yayın gecikmiş olabilir); devam ediliyor."
+
+      - name: 3) Otomatik geri yükleme
+        run: |
+          echo "T_GERI_BASLA=$(date -u +%s)" >> "$GITHUB_ENV"
+          GERI_YUKLEME_MANIFEST="$RUNNER_TEMP/manifest.json" bash scripts/dr/geri-yukle.sh | tee "$RUNNER_TEMP/geri.log"
+          git add data/
+          git commit -qm "geri-yukleme(tatbikat): veri en yeni yedekten geri kuruldu"
+          git pull -q --rebase origin main && git push -q origin HEAD:main
+          echo "T_PUSH=$(date -u +%s)" >> "$GITHUB_ENV"
+
+      - name: 4) Hizmetin geri geldiğini canlı sitede doğrula
+        run: |
+          BEKLENEN=$(jq -r '.latest_data_at' "$RUNNER_TEMP/manifest.json")
+          for i in $(seq 1 90); do
+            GELEN=$(curl -fsS "$SITE/data/latest.json?t=$(date +%s)" 2>/dev/null | jq -r '.data_at' 2>/dev/null || true)
+            if [ "$GELEN" = "$BEKLENEN" ]; then
+              echo "T_HIZMET=$(date -u +%s)" >> "$GITHUB_ENV"; echo "Site yedekteki veriyi sunuyor: $GELEN"; exit 0
+            fi
+            sleep 10
+          done
+          echo "15 dk içinde hizmet doğrulanamadı"; exit 1
+
+      - name: 5) RTO/RPO hesapla ve kanıtı kaydet
+        run: |
+          ls data/snapshots | sort > "$RUNNER_TEMP/sonra.txt"
+          python3 - <<'PY'
+          import json, os, datetime as dt
+          e = os.environ; T = lambda k: int(e[k]) if e.get(k) else None
+          utc = lambda s: dt.datetime.fromtimestamp(s, dt.timezone.utc).isoformat(timespec="seconds") if s else None
+          m = json.load(open(os.path.join(e["RUNNER_TEMP"], "manifest.json"), encoding="utf-8"))
+          once = open(os.path.join(e["RUNNER_TEMP"], "once.txt")).read().split()
+          sonra = open(os.path.join(e["RUNNER_TEMP"], "sonra.txt")).read().split()
+          t_sil, t_hiz = T("T_SIL"), T("T_HIZMET")
+          en_yeni = dt.datetime.fromisoformat(m["en_yeni_veri_utc"].replace("Z", "+00:00")).timestamp()
+          rto_dk = round((t_hiz - t_sil) / 60, 1)
+          rpo_dk = round((t_sil - en_yeni) / 60, 1)
+          kayip = sorted(set(once) - set(sonra))
+          k = {
+            "senaryo": "Snapshot verisinin tamamen silinmesi (yanlışlıkla / fidye yazılımı)",
+            "site": e["SITE"],
+            "calistirma": f'{e["GITHUB_SERVER_URL"]}/{e["GITHUB_REPOSITORY"]}/actions/runs/{e["GITHUB_RUN_ID"]}',
+            "kullanilan_yedek": {k2: m[k2] for k2 in ("olusturma_utc", "snapshot_sayisi", "en_yeni_veri_utc", "sha256")},
+            "zaman_cizelgesi_utc": {
+              "veri_silindi": utc(t_sil),
+              "kesinti_canli_sitede_goruldu": utc(T("T_KESINTI")),
+              "geri_yukleme_basladi": utc(T("T_GERI_BASLA")),
+              "geri_yuklenen_veri_gonderildi": utc(T("T_PUSH")),
+              "hizmet_geri_geldi": utc(t_hiz),
+            },
+            "RTO_dakika": rto_dk, "RTO_hedef_dakika": int(e["RTO_HEDEF_DK"]),
+            "RPO_dakika": rpo_dk, "RPO_hedef_dakika": int(e["RPO_HEDEF_SA"]) * 60,
+            "RPO_tanimi": "Silinme anı ile yedekteki en yeni verinin zamanı arasındaki fark",
+            "RTO_tanimi": "Verinin silindiği an ile canlı sitenin yedekteki veriyi yeniden sunduğu an arasındaki süre",
+            "snapshot_once": len(once), "snapshot_sonra": len(sonra), "kaybolan_snapshotlar": kayip,
+            "sonuc": "BAŞARILI" if rto_dk <= int(e["RTO_HEDEF_DK"]) and rpo_dk <= int(e["RPO_HEDEF_SA"]) * 60 else "HEDEF AŞILDI",
+          }
+          os.makedirs("docs/guvenlik/dr", exist_ok=True)
+          ad = "docs/guvenlik/dr/tatbikat-" + dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%MZ") + ".json"
+          json.dump(k, open(ad, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+          print(json.dumps(k, ensure_ascii=False, indent=2))
+          with open(e["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as s:
+              s.write(f"## DR tatbikatı: {k['sonuc']}\n\n| Ölçüt | Ölçülen | Hedef |\n|---|---|---|\n")
+              s.write(f"| RTO | {rto_dk} dk | ≤ {e['RTO_HEDEF_DK']} dk |\n| RPO | {rpo_dk} dk | ≤ {int(e['RPO_HEDEF_SA'])*60} dk |\n")
+              s.write(f"| Snapshot (önce → sonra) | {len(once)} → {len(sonra)} | kayıp: {len(kayip)} |\n")
+          PY
+          git add docs/guvenlik/dr/
+          git commit -qm "docs(dr): tatbikat kanıtı (RTO/RPO)"
+          git pull -q --rebase origin main && git push -q origin HEAD:main
