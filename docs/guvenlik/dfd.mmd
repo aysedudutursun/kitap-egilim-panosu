@@ -1,0 +1,34 @@
+flowchart LR
+  OL["Open Library API<br/>(dış varlık)"]
+  DEV["Geliştirici<br/>(dış varlık)"]
+  ZIY["Ziyaretçi<br/>(dış varlık)"]
+  subgraph GH["GS1 / GS4 — GitHub"]
+    direction TB
+    VC(["Veri çek iş akışı<br/>6 saatte bir"])
+    REPO[("GitHub deposu<br/>kod + data/ snapshot'lar<br/>git geçmişi = sürümleme")]
+    TAR(["Güvenlik iş akışları<br/>ZAP · CodeQL · Dependabot"])
+  end
+  subgraph CF["GS2 — Cloudflare"]
+    direction TB
+    BLD(["Derleme<br/>yalnız _site"])
+    EDGE(["Kenar ağı<br/>HSTS · CSP · başlıklar"])
+  end
+  subgraph BR["GS3 — Ziyaretçi tarayıcısı"]
+    direction TB
+    APP(["Pano (app.js)<br/>girdi izin listesi"])
+    SW[("Service worker önbelleği<br/>+ localStorage")]
+  end
+  OL -- "HTTPS JSON (güvenilmez veri)" --> VC
+  VC -- "snapshot commit" --> REPO
+  DEV -- "git push (2FA)" --> REPO
+  REPO -- "tarama" --> TAR
+  REPO -- "GitHub uygulaması (anahtarsız)" --> BLD
+  BLD --> EDGE
+  EDGE -- "HTTPS" --> APP
+  APP <--> SW
+  ZIY --> APP
+  classDef ext fill:#fff4e5,stroke:#9C3D21,color:#2b1d14;
+  class OL,DEV,ZIY ext;
+  style GH stroke-dasharray: 6 4,fill:#f6f8fa
+  style CF stroke-dasharray: 6 4,fill:#fff8f0
+  style BR stroke-dasharray: 6 4,fill:#f3f7ff
