@@ -1,0 +1,11 @@
+# Bağımlılık taraması: GitHub Actions sürümlerini haftalık kontrol eder ve güncelleme PR'ı açar.
+# Not: Projede npm paketi yoktur; Chart.js vendor/ altında elle sabitlenmiştir (v4.6.1), rapora not edilir.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+    open-pull-requests-limit: 5
