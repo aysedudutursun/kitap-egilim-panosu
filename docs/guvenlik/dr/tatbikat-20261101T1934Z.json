@@ -1,0 +1,28 @@
+{
+  "senaryo": "Snapshot verisinin tamamen silinmesi (yanlışlıkla / fidye yazılımı)",
+  "site": "https://kitap-egilim-panosu.tayse1482.workers.dev",
+  "calistirma": "https://github.com/aysedudutursun/kitap-egilim-panosu/actions/runs/41342255041",
+  "kullanilan_yedek": {
+    "olusturma_utc": "2026-11-01T19:33:21+00:00",
+    "snapshot_sayisi": 14,
+    "en_yeni_veri_utc": "2026-11-01T19:31:37.695Z",
+    "sha256": "023ea9e9f4721c3e2f8ff51ee7e1fcd2d95cd78eecbeeeb2581fb70b3e161d16"
+  },
+  "zaman_cizelgesi_utc": {
+    "veri_silindi": "2026-11-01T19:33:23+00:00",
+    "kesinti_canli_sitede_goruldu": "2026-11-01T19:33:53+00:00",
+    "geri_yukleme_basladi": "2026-11-01T19:33:53+00:00",
+    "geri_yuklenen_veri_gonderildi": "2026-11-01T19:33:56+00:00",
+    "hizmet_geri_geldi": "2026-11-01T19:34:27+00:00"
+  },
+  "RTO_dakika": 1.1,
+  "RTO_hedef_dakika": 15,
+  "RPO_dakika": 1.8,
+  "RPO_hedef_dakika": 360,
+  "RPO_tanimi": "Silinme anı ile yedekteki en yeni verinin zamanı arasındaki fark",
+  "RTO_tanimi": "Verinin silindiği an ile canlı sitenin yedekteki veriyi yeniden sunduğu an arasındaki süre",
+  "snapshot_once": 14,
+  "snapshot_sonra": 14,
+  "kaybolan_snapshotlar": [],
+  "sonuc": "BAŞARILI"
+}
