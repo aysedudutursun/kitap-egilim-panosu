@@ -1,0 +1,48 @@
+hedef: https://kitap-egilim-panosu.tayse1482.workers.dev
+zaman_utc: 2026-11-01T18:28:04Z
+calistirma: https://github.com/aysedudutursun/kitap-egilim-panosu/actions/runs/41336756231
+
+== Ana sayfa yanıt başlıkları ==
+HTTP/2 200 
+date: Sun, 01 Nov 2026 18:28:04 GMT
+content-type: text/html
+content-length: 13217
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+etag: "bc152f1dd4678a3ce468b7553ed16d4d"
+strict-transport-security: max-age=31536000; includeSubDomains
+content-security-policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+cross-origin-embedder-policy: require-corp
+cross-origin-opener-policy: same-origin
+cross-origin-resource-policy: same-origin
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: DENY
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=G5VHTPTU3HDh8C4ZqV08Ma5wlkzbGBKrmu58h88jZgrc7P5lI9H%2FKuYTyJBH2PwkzpjR7MlNmlvvGR9n7AmErfbX6wvVxhn14891lLCPddNGXPGp3%2BXLVwmeh7tkUVnRbdpj1Jz1ib%2FqIS11xOdJUwFagLWDX7OifLSRmg%3D%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+server: cloudflare
+cf-ray: a53cf5085ade9d03-ORD
+alt-svc: h3=":443"; ma=86400
+
+== HTTP -> HTTPS yönlendirmesi ==
+http kodu: 200  yönlendirme: 
+
+== Yayınlanmaması gereken dosyalar (404 beklenir) ==
+/scripts/fetch.mjs                            404
+/scripts/pages-build.sh                       404
+/.github/workflows/veri-cek.yml               404
+/wrangler.jsonc                               404
+/_headers                                     404
+/data/snapshots/                              404
+/docs/guvenlik/zap-once/report_json.json      404
+/README.md                                    404
+/.git/config                                  404
+
+== Yayınlanması gereken dosyalar (200 beklenir) ==
+/                                             200
+/vaka-calismasi.html                          307
+/data/latest.json                             200
+/css/vaka.css                                 200
+/js/app.js                                    200
+/sw.js                                        200
