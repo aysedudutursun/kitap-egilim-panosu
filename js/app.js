@@ -12,7 +12,12 @@
 
   const params = new URLSearchParams(location.search);
   const TEST = params.get('test');
-  const DATA_URL = TEST === 'hata' ? 'data/BOZUK-adres.json' : (params.get('veri') || 'data/latest.json');
+  // Güvenlik: URL parametreleri izin listesiyle doğrulanır (STRIDE: Tampering / DoS).
+  // ?veri= yalnızca aynı kökendeki data/ klasöründen bir .json dosyası olabilir.
+  const VERI = params.get('veri');
+  const DATA_URL = TEST === 'hata' ? 'data/BOZUK-adres.json'
+    : (VERI && /^data\/[a-z0-9-]+\.json$/.test(VERI) ? VERI : 'data/latest.json');
+  const izinli = (v, liste, varsayilan) => (liste.includes(v) ? v : varsayilan);
   const STATUS_URL = 'data/status.json';
   const TIMEOUT_MS = 8000;
   const PAGE = 25;
@@ -35,8 +40,8 @@
   const state = {
     data: null,
     stale: null,               // null | 'net' | 'src' | 'old'
-    lang: params.get('lang') || prefs.lang || 'tr',
-    mode: params.get('mod') || prefs.mode || 'yetiskin',
+    lang: izinli(params.get('lang') || prefs.lang, ['tr', 'en'], 'tr'),
+    mode: izinli(params.get('mod') || prefs.mode, ['yetiskin', 'cocuk'], 'yetiskin'),
     f: { list: 'daily', cat: '', ymin: null, ymax: null, q: '', stay: false, tr: false },
     sort: { key: 'daily', dir: 'asc' },
     shown: PAGE,
