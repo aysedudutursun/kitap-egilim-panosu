@@ -70,7 +70,10 @@ jobs:
             fi
             sleep 10
           done
-          echo "T_KESINTI=" >> "$GITHUB_ENV"; echo "10 dk içinde kesinti gözlenemedi (yayın gecikmiş olabilir); devam ediliyor."
+          # Kesinti görülmeden devam edilirse RTO yanlış (fazla iyi) ölçülür; bu yüzden tatbikat durur.
+          echo "10 dk içinde kesinti canlı sitede gözlenemedi; ölçüm geçersiz olacağı için durduruldu."
+          echo "Veriyi geri getirmek için: git revert <felaket commit'i> ya da scripts/dr/geri-yukle.sh"
+          exit 1
 
       - name: 3) Otomatik geri yükleme
         run: |
