@@ -1,0 +1,59 @@
+name: Güvenlik başlığı kontrolü
+
+# Canlı sitenin HTTP güvenlik başlıklarını ve yayınlanmaması gereken dosyaları kontrol eder.
+# Sonuç kanıt olarak docs/guvenlik/baslik-<etiket>.txt dosyasına commit'lenir.
+on:
+  workflow_dispatch:
+    inputs:
+      hedef:
+        description: "Kontrol edilecek adres"
+        required: true
+        default: "https://kitap-egilim-panosu.tayse1482.workers.dev"
+      etiket:
+        description: "Kanıt dosyası etiketi"
+        required: true
+        default: "cloudflare"
+
+permissions:
+  contents: write
+
+jobs:
+  kontrol:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Başlıkları ve dosya sızıntısını kontrol et
+        env:
+          HEDEF: ${{ inputs.hedef }}
+          ETIKET: ${{ inputs.etiket }}
+        run: |
+          case "$ETIKET" in *[!a-z0-9-]*|"") echo "Geçersiz etiket"; exit 1;; esac
+          HEDEF="${HEDEF%/}"
+          OUT="docs/guvenlik/baslik-$ETIKET.txt"
+          mkdir -p docs/guvenlik
+          {
+            echo "hedef: $HEDEF"
+            echo "zaman_utc: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "calistirma: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo
+            echo "== Ana sayfa yanıt başlıkları =="
+            curl -sS -D - -o /dev/null --max-time 20 "$HEDEF/"
+            echo "== HTTP -> HTTPS yönlendirmesi =="
+            curl -sS -o /dev/null -w 'http kodu: %{http_code}  yönlendirme: %{redirect_url}\n' --max-time 20 "http://${HEDEF#https://}/"
+            echo
+            echo "== Yayınlanmaması gereken dosyalar (404 beklenir) =="
+            for p in /scripts/fetch.mjs /scripts/pages-build.sh /.github/workflows/veri-cek.yml /wrangler.jsonc /_headers /data/snapshots/ /docs/guvenlik/zap-once/report_json.json /README.md /.git/config; do
+              printf '%-45s %s\n' "$p" "$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$HEDEF$p")"
+            done
+            echo
+            echo "== Yayınlanması gereken dosyalar (200 beklenir) =="
+            for p in / /vaka-calismasi.html /data/latest.json /css/vaka.css /js/app.js /sw.js; do
+              printf '%-45s %s\n' "$p" "$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$HEDEF$p")"
+            done
+          } | tee "$OUT"
+          git config user.name "guvenlik-botu"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$OUT"
+          git commit -m "docs(güvenlik): başlık kontrolü kanıtı ($ETIKET)" || exit 0
+          git pull --rebase origin main
+          git push origin HEAD:main
