@@ -1,0 +1,3 @@
+hedef: https://kitap-egilim-panosu.tayse1482.workers.dev/
+tarama_utc: 2026-11-01T18:30:34Z
+calistirma: https://github.com/aysedudutursun/kitap-egilim-panosu/actions/runs/41336879908
