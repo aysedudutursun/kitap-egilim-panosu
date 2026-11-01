@@ -1,0 +1,53 @@
+name: Güvenlik puanı ölçümü (Observatory + securityheaders)
+
+# Mozilla HTTP Observatory (API v2) ve securityheaders.com notlarını ölçer;
+# ham yanıtlar kanıt olarak docs/guvenlik/puan-<etiket>.txt dosyasına commit'lenir.
+on:
+  workflow_dispatch:
+    inputs:
+      host:
+        description: "Alan adı (https:// olmadan)"
+        required: true
+        default: "kitap-egilim-panosu.tayse1482.workers.dev"
+      etiket:
+        description: "Kanıt dosyası etiketi"
+        required: true
+        default: "cloudflare"
+
+permissions:
+  contents: write
+
+jobs:
+  olc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ölç
+        env:
+          HOST: ${{ inputs.host }}
+          ETIKET: ${{ inputs.etiket }}
+        run: |
+          case "$ETIKET" in *[!a-z0-9-]*|"") echo "Geçersiz etiket"; exit 1;; esac
+          case "$HOST" in *[!a-z0-9.-]*|"") echo "Geçersiz alan adı"; exit 1;; esac
+          OUT="docs/guvenlik/puan-$ETIKET.txt"
+          mkdir -p docs/guvenlik
+          {
+            echo "host: $HOST"
+            echo "zaman_utc: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "calistirma: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo
+            echo "== Mozilla HTTP Observatory (API v2) =="
+            curl -sS -X POST --max-time 120 "https://observatory-api.mdn.mozilla.net/api/v2/scan?host=$HOST" \
+              | jq '{grade, score, tests_passed, tests_failed, tests_quantity, scanned_at, details_url, error}'
+            echo
+            echo "== securityheaders.com =="
+            curl -sS -I --max-time 60 "https://securityheaders.com/?q=https%3A%2F%2F$HOST%2F&hide=on&followRedirects=on" \
+              | grep -i '^x-grade' || echo "x-grade başlığı alınamadı"
+            echo "rapor: https://securityheaders.com/?q=https%3A%2F%2F$HOST%2F&hide=on&followRedirects=on"
+          } | tee "$OUT"
+          git config user.name "guvenlik-botu"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$OUT"
+          git commit -m "docs(güvenlik): Observatory/securityheaders puanı ($ETIKET)" || exit 0
+          git pull --rebase origin main
+          git push origin HEAD:main
