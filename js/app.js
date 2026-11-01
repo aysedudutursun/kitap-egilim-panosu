@@ -416,12 +416,14 @@
         <td data-label="${esc(t.colCat)}"><span class="tag">${esc(catLabel(b.category))}</span>${b.child && childTag ? `<span class="tag tag--child">${esc(t.childTag)}</span>` : ''}</td>
         <td class="num" data-label="${esc(t.colYear)}">${b.year ?? '—'}</td>
         <td data-label="${esc(t.colTrend)}"><span class="trend">${sparkline(b)}<span class="status status--${b.status}"><span aria-hidden="true">${STATUS_ICON[b.status] || ''}</span>${esc(st)}</span></span></td>
-        <td data-label="${esc(t.colDays)}"><span class="days"><span class="days__bar" style="width:${Math.round((b.days / maxDays) * 48)}px" aria-hidden="true"></span>${esc(t.days(b.days))}</span></td>
+        <td data-label="${esc(t.colDays)}"><span class="days"><span class="days__bar" data-w="${Math.round((b.days / maxDays) * 48)}" aria-hidden="true"></span>${esc(t.days(b.days))}</span></td>
         <td class="num" data-label="${esc(t.colWeekly)}">${b.weekly ?? '—'}</td>
         <td class="num" data-label="${esc(t.colEd)}">${fmtNum(b.editions)}</td>
         <td data-label="${esc(t.colTr)}">${b.tr === true ? `<span class="trflag trflag--yes"><span aria-hidden="true">✓</span> ${esc(t.trYes)}</span>` : b.tr === false ? `<span class="trflag">${esc(t.trNo)}</span>` : '—'}</td>
       </tr>`;
     }).join('');
+    // Sıkı CSP (style-src 'self') satır içi style özniteliğine izin vermez; genişlik CSSOM ile verilir.
+    $$('#tbody .days__bar').forEach((el) => { el.style.width = `${el.dataset.w}px`; });
 
     const empty = all.length === 0;
     $('#empty').hidden = !empty;

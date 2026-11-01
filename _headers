@@ -1,0 +1,18 @@
+# Cloudflare Pages güvenlik başlıkları (https://developers.cloudflare.com/pages/configuration/headers/)
+# Tüm kaynaklar aynı kökenden gelir; dış script/stil/font yoktur. Bu yüzden CSP 'self' ile sıkılaştırılmıştır.
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Resource-Policy: same-origin
+
+/data/*
+  Cache-Control: no-cache
+
+/sw.js
+  Cache-Control: no-cache
